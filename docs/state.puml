@@ -1,0 +1,17 @@
+stateDiagram-v2
+    [*] --> Створено : createDeal() (конструктор)
+
+    Створено --> ТурОрганізовано : Agent.organizeTour()
+    ТурОрганізовано --> ПропозиціяНадіслана : Buyer.sendProposal(завдаток)
+    ПропозиціяНадіслана --> ЗустрічнаПропозиція : Seller.counterOffer()
+    ЗустрічнаПропозиція --> ОцінкаІпотеки : Bank.evaluateMortgage()
+    ОцінкаІпотеки --> Завершено : Buyer.finalizeDeal() (фінальний метод)
+    Завершено --> [*]
+
+    note right of Створено
+        Абстрактний клас: Deal
+    end note
+
+    note right of Завершено
+        Стан: угода завершена
+    end note

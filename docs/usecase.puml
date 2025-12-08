@@ -1,0 +1,28 @@
+@startuml
+left to right direction
+skinparam actorStyle "awesome"
+skinparam usecase {
+    BackgroundColor #EFEFEF
+    BorderColor black
+}
+rectangle "Система підприємства з нерухомості" {
+    (Надіслати пропозицію)
+    (Надіслати завдаток)
+    (Організувати 3D-тур)
+    (Організувати перегляд)
+    (Дати зустрічну пропозицію)
+    (Попередня оцінка іпотеки)
+}
+
+actor "Покупець/Орендар" as Buyer
+actor "Агент" as Agent
+actor "Продавець" as Seller
+actor "Банк" as Bank
+
+Buyer --> (Надіслати пропозицію)
+Buyer --> (Надіслати завдаток)
+Agent --> (Організувати 3D-тур)
+Agent --> (Організувати перегляд)
+Seller --> (Дати зустрічну пропозицію)
+Bank --> (Попередня оцінка іпотеки)
+@enduml

@@ -1,0 +1,69 @@
+classDiagram
+    %% --- Базовий клас ---
+    class Deal {
+        +id: int
+        +date: string
+        +status: string
+        +confirm(): void
+        +cancel(): void
+    }
+
+    %% --- Інтерфейс ---
+    class Reviewable {
+        <<interface>>
+        +reviewOffer(): void
+    }
+
+    %% --- Абстрактний клас ---
+    class Participant {
+        <<abstract>>
+        +name: string
+        +contactInfo: string
+        +getInfo(): string
+    }
+
+    %% --- Конкретні учасники ---
+    class Buyer {
+        -deposit: float
+        +Buyer(name, deposit)
+        +sendProposal(): void
+        +finalizeDeal(): void
+    }
+
+    class Agent {
+        -agency: string
+        +Agent(name, agency)
+        +organizeTour(): void
+        +showProperty(): void
+    }
+
+    class Seller {
+        -property: string
+        +Seller(name, property)
+        +counterOffer(): void
+    }
+
+    class Bank {
+        -name: string
+        +Bank(name)
+        +evaluateMortgage(): bool
+    }
+
+    %% --- Ієрархія ---
+    Participant <|-- Buyer
+    Participant <|-- Agent
+    Participant <|-- Seller
+    Participant <|-- Bank
+
+    %% --- Відносини ---
+    Buyer ..> Agent : "залежність (перегляд)"
+    Buyer ..> Seller : "залежність (пропозиція)"
+    Buyer ..> Bank : "залежність (іпотека)"
+
+    Seller ..|> Reviewable : "реалізує"
+    Agent ..|> Reviewable : "реалізує"
+
+    Deal *-- Seller : "композиція"
+    Deal o-- Bank : "агрегація"
+    Deal *-- Buyer : "композиція"
+    Deal o-- Agent : "агрегація"

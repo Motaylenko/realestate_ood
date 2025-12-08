@@ -1,0 +1,26 @@
+sequenceDiagram
+    autonumber
+    participant Buyer as Покупець/Орендар
+    participant Agent as Агент
+    participant Seller as Продавець
+    participant Bank as Банк
+    participant Deal as Абстрактний клас Deal
+    participant Reviewable as Інтерфейс Reviewable
+
+    Note over Agent: Агент організовує 3D-тур
+    Buyer->>Agent: RequestTour()
+    Agent->>Deal: createDeal()  (конструктор)
+    Agent-->>Buyer: showTour()
+
+    Note over Buyer: Покупець надсилає пропозицію і завдаток
+    Buyer->>Seller: sendProposal(deposit)
+    Seller->>Reviewable: reviewOffer() (реалізація інтерфейсу)
+    Seller-->>Buyer: counterOffer()
+
+    Note over Bank: Банк робить попередню оцінку іпотеки
+    Buyer->>Bank: requestMortgageEvaluation()
+    Bank->>Deal: attachEvaluation() (агрегація)
+    Bank-->>Buyer: evaluationResult(bool)
+
+    Note over Deal: Завершення угоди
+    Buyer->>Deal: finalizeDeal() (final method)
