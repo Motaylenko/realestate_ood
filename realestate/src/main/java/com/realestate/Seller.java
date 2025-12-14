@@ -10,9 +10,18 @@ public class Seller extends Participant implements Reviewable {
     private String property;
     private DealService dealService;
 
-    @Inject
-    public Seller(DealService dealService) {
+    public Seller() {
         super("", "");
+    }
+
+    // @Inject
+    // public Seller(DealService dealService) {
+    //     super("", "");
+    //     this.dealService = dealService;
+    // }
+
+    @Inject
+    public void setDealService(DealService dealService) {
         this.dealService = dealService;
     }
 

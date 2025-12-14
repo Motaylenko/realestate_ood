@@ -30,36 +30,39 @@ classDiagram
     class Buyer {
         -id: int
         -deposit: float
-        +Buyer(DealService)
+        +Buyer()
         +sendProposal(): void
         +finalizeDeal(): void
         +getId(): int
         +setId(id): void
         +getDeposit(): float
         +setDeposit(deposit): void
+        +setDealService(DealService): void
     }
 
     class Agent {
         -id: int
         -agency: string
-        +Agent(DealService)
+        +Agent()
         +organizeTour(): void
         +showProperty(): void
         +getId(): int
         +setId(id): void
         +getAgency(): string
         +setAgency(agency): void
+        +setDealService(DealService): void
     }
 
     class Seller {
         -id: int
         -property: string
-        +Seller(DealService)
+        +Seller()
         +counterOffer(): void
         +getId(): int
         +setId(id): void
         +getProperty(): string
         +setProperty(property): void
+        +setDealService(DealService): void
     }
 
     class Bank {
@@ -104,9 +107,9 @@ classDiagram
     Deal o-- Agent : "агрегація"
 
     %% --- Впровадження залежностей ---
-    Buyer --> DealService : "впровадження через конструктор"
-    Agent --> DealService : "впровадження через конструктор"
-    Seller --> DealService : "впровадження через конструктор"
+    Buyer --> DealService : "впровадження через setter"
+    Agent --> DealService : "впровадження через setter"
+    Seller --> DealService : "впровадження через setter"
     DealService --> Connection : "впровадження"
 
     RealestateModule --> DealService : "конфігурація"

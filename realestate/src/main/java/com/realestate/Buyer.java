@@ -10,9 +10,18 @@ public class Buyer extends Participant {
     private float deposit;
     private DealService dealService;
 
-    @Inject
-    public Buyer(DealService dealService) {
+    public Buyer() {
         super("", "");
+    }
+
+    // @Inject
+    // public Buyer(DealService dealService) {
+    //     super("", "");
+    //     this.dealService = dealService;
+    // }
+
+    @Inject
+    public void setDealService(DealService dealService) {
         this.dealService = dealService;
     }
 

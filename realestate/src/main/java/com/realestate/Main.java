@@ -13,20 +13,23 @@ public class Main {
 
         DealService dealService = injector.getInstance(DealService.class);
 
-        // Створення учасників з інжекцією залежностей
-        Buyer buyer = injector.getInstance(Buyer.class);
+        // Створення учасників з впровадженням залежностей через сетери
+        Buyer buyer = new Buyer();
+        injector.injectMembers(buyer);
         buyer.setId(1);
         buyer.setName("Іван Петренко");
         buyer.setContactInfo("ivan@email.com");
         buyer.setDeposit(10000.0f);
 
-        Seller seller = injector.getInstance(Seller.class);
+        Seller seller = new Seller();
+        injector.injectMembers(seller);
         seller.setId(1);
         seller.setName("Марія Коваленко");
         seller.setContactInfo("maria@email.com");
         seller.setProperty("Квартира на Хрещатику");
 
-        Agent agent = injector.getInstance(Agent.class);
+        Agent agent = new Agent();
+        injector.injectMembers(agent);
         agent.setId(1);
         agent.setName("Олег Сидоренко");
         agent.setContactInfo("oleg@email.com");
