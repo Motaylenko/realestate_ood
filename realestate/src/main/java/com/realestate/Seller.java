@@ -12,7 +12,7 @@ public class Seller extends Participant implements Reviewable {
     private SellerService sellerService;
 
     @AssistedInject
-    public Seller(SellerService sellerService, @Assisted int id, @Assisted String name, @Assisted String contactInfo, @Assisted String property) {
+    public Seller(SellerService sellerService, @Assisted("id") int id, @Assisted("name") String name, @Assisted("contactInfo") String contactInfo, @Assisted("property") String property) {
         super(name, contactInfo);
         this.id = id;
         this.property = property;

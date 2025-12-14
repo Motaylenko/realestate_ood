@@ -15,9 +15,10 @@ public class Deal {
     private Buyer buyer;
     private Agent agent;
     private Bank bank;
+    private DealService dealService;
 
     @AssistedInject
-    public Deal(DealService dealService, @Assisted int id, @Assisted String date) {
+    public Deal(DealService dealService, @Assisted("id") int id, @Assisted("date") String date) {
         this.id = id;
         this.date = date;
         this.status = "Нова";

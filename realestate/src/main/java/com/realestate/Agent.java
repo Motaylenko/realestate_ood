@@ -13,7 +13,7 @@ public class Agent extends Participant implements Reviewable {
     private AgentService agentService;
 
     @AssistedInject
-    public Agent(AgentService agentService, @Assisted int id, @Assisted String name, @Assisted String contactInfo, @Assisted String agency) {
+    public Agent(AgentService agentService, @Assisted("id") int id, @Assisted("name") String name, @Assisted("contactInfo") String contactInfo, @Assisted("agency") String agency) {
         super(name, contactInfo);
         this.id = id;
         this.agency = agency;

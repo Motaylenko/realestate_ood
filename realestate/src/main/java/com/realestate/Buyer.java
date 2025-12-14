@@ -13,7 +13,7 @@ public class Buyer extends Participant {
     private BuyerService buyerService;
 
     @AssistedInject
-    public Buyer(BuyerService buyerService, @Assisted int id, @Assisted String name, @Assisted String contactInfo, @Assisted float deposit) {
+    public Buyer(BuyerService buyerService, @Assisted("id") int id, @Assisted("name") String name, @Assisted("contactInfo") String contactInfo, @Assisted("deposit") float deposit) {
         super(name, contactInfo);
         this.id = id;
         this.deposit = deposit;

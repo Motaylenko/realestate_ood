@@ -10,10 +10,12 @@ import java.sql.SQLException;
 @Singleton
 public class DealService {
     private final Connection connection;
+    private final DealFactory dealFactory;
 
     @Inject
-    public DealService(Connection connection) {
+    public DealService(Connection connection, DealFactory dealFactory) {
         this.connection = connection;
+        this.dealFactory = dealFactory;
     }
 
     public void saveDeal(Deal deal) {
@@ -48,9 +50,8 @@ public class DealService {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    Deal deal = new Deal(rs.getInt("id"), rs.getString("date"));
-                    // Тут можна встановити статус, але оскільки він встановлюється в конструкторі,
-                    // можливо потрібно додати метод для зміни статусу
+                    Deal deal = dealFactory.create(rs.getInt("id"), rs.getString("date"));
+                    // Статус встановлюється в конструкторі як "Нова"
                     return deal;
                 }
             }
