@@ -1,4 +1,6 @@
 package com.realestate;
+import com.realestate.webserver.JavalinWebServer;
+import com.realestate.webserver.WebServer;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -65,5 +67,10 @@ public class RealestateModule extends AbstractModule {
                 ");";
             stmt.execute(createSellerTable);
         }
+    }
+    @Provides
+    @Singleton
+    WebServer provideWebServer() {
+        return new JavalinWebServer();
     }
 }
