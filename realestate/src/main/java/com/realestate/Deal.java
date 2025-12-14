@@ -1,8 +1,6 @@
 package com.realestate;
 
 import com.google.inject.Inject;
-import com.google.inject.assistedinject.Assisted;
-import com.google.inject.assistedinject.AssistedInject;
 
 /**
  * Клас угоди з нерухомістю
@@ -15,14 +13,8 @@ public class Deal {
     private Buyer buyer;
     private Agent agent;
     private Bank bank;
-    private DealService dealService;
 
-    @AssistedInject
-    public Deal(DealService dealService, @Assisted("id") int id, @Assisted("date") String date) {
-        this.id = id;
-        this.date = date;
-        this.status = "Нова";
-        this.dealService = dealService;
+    public Deal() {
     }
     
     public void confirm() {
@@ -55,12 +47,24 @@ public class Deal {
         return id;
     }
     
+    public void setId(int id) {
+        this.id = id;
+    }
+    
     public String getDate() {
         return date;
     }
     
+    public void setDate(String date) {
+        this.date = date;
+    }
+    
     public String getStatus() {
         return status;
+    }
+    
+    public void setStatus(String status) {
+        this.status = status;
     }
     
     public Seller getSeller() {

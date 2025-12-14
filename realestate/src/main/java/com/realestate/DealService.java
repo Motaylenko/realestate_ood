@@ -10,32 +10,64 @@ import java.sql.SQLException;
 @Singleton
 public class DealService {
     private final Connection connection;
-    private final DealFactory dealFactory;
 
     @Inject
-    public DealService(Connection connection, DealFactory dealFactory) {
+    public DealService(Connection connection) {
         this.connection = connection;
-        this.dealFactory = dealFactory;
     }
 
     public void saveDeal(Deal deal) {
-        String sql = "INSERT OR REPLACE INTO deals (id, date, status, seller_id, buyer_id, agent_id, bank_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT OR REPLACE INTO deals (id, date, status) VALUES (?, ?, ?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, deal.getId());
             stmt.setString(2, deal.getDate());
             stmt.setString(3, deal.getStatus());
-
-            // Для seller, buyer, agent, bank потрібно буде додати методи для отримання їх ID
-            // Поки що встановлюємо null або 0
-            stmt.setNull(4, java.sql.Types.INTEGER); // seller_id
-            stmt.setNull(5, java.sql.Types.INTEGER); // buyer_id
-            stmt.setNull(6, java.sql.Types.INTEGER); // agent_id
-            stmt.setNull(7, java.sql.Types.INTEGER); // bank_id
-
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Failed to save deal", e);
+        }
+    }
+
+    public void saveBuyer(Buyer buyer) {
+        String sql = "INSERT OR REPLACE INTO buyers (id, name, contactInfo, deposit) VALUES (?, ?, ?, ?)";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, buyer.getId());
+            stmt.setString(2, buyer.getName());
+            stmt.setString(3, buyer.getContactInfo());
+            stmt.setFloat(4, buyer.getDeposit());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to save buyer", e);
+        }
+    }
+
+    public void saveAgent(Agent agent) {
+        String sql = "INSERT OR REPLACE INTO agents (id, name, contactInfo, agency) VALUES (?, ?, ?, ?)";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, agent.getId());
+            stmt.setString(2, agent.getName());
+            stmt.setString(3, agent.getContactInfo());
+            stmt.setString(4, agent.getAgency());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to save agent", e);
+        }
+    }
+
+    public void saveSeller(Seller seller) {
+        String sql = "INSERT OR REPLACE INTO sellers (id, name, contactInfo, property) VALUES (?, ?, ?, ?)";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, seller.getId());
+            stmt.setString(2, seller.getName());
+            stmt.setString(3, seller.getContactInfo());
+            stmt.setString(4, seller.getProperty());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to save seller", e);
         }
     }
 
@@ -50,8 +82,10 @@ public class DealService {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    Deal deal = dealFactory.create(rs.getInt("id"), rs.getString("date"));
-                    // Статус встановлюється в конструкторі як "Нова"
+                    Deal deal = new Deal();
+                    deal.setId(rs.getInt("id"));
+                    deal.setDate(rs.getString("date"));
+                    deal.setStatus(rs.getString("status"));
                     return deal;
                 }
             }

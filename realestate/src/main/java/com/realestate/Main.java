@@ -11,20 +11,33 @@ public class Main {
         // Створення інжектора Guice
         Injector injector = Guice.createInjector(new RealestateModule());
 
-        // Отримання фабрик
-        BuyerFactory buyerFactory = injector.getInstance(BuyerFactory.class);
-        SellerFactory sellerFactory = injector.getInstance(SellerFactory.class);
-        AgentFactory agentFactory = injector.getInstance(AgentFactory.class);
-        DealFactory dealFactory = injector.getInstance(DealFactory.class);
+        DealService dealService = injector.getInstance(DealService.class);
 
-        // Створення учасників
-        Buyer buyer = buyerFactory.create(1, "Іван Петренко", "ivan@email.com", 10000.0f);
-        Seller seller = sellerFactory.create(1, "Марія Коваленко", "maria@email.com", "Квартира на Хрещатику");
-        Agent agent = agentFactory.create(1, "Олег Сидоренко", "oleg@email.com", "Київська Нерухомість");
+        // Створення учасників з інжекцією залежностей
+        Buyer buyer = injector.getInstance(Buyer.class);
+        buyer.setId(1);
+        buyer.setName("Іван Петренко");
+        buyer.setContactInfo("ivan@email.com");
+        buyer.setDeposit(10000.0f);
+
+        Seller seller = injector.getInstance(Seller.class);
+        seller.setId(1);
+        seller.setName("Марія Коваленко");
+        seller.setContactInfo("maria@email.com");
+        seller.setProperty("Квартира на Хрещатику");
+
+        Agent agent = injector.getInstance(Agent.class);
+        agent.setId(1);
+        agent.setName("Олег Сидоренко");
+        agent.setContactInfo("oleg@email.com");
+        agent.setAgency("Київська Нерухомість");
+
         Bank bank = new Bank("ПриватБанк", "office@privatbank.ua");
         
         // Створення угоди
-        Deal deal = dealFactory.create(1, "2025-10-20");
+        Deal deal = new Deal();
+        deal.setId(1);
+        deal.setDate("2025-10-20");
         deal.setBuyer(buyer);
         deal.setSeller(seller);
         deal.setAgent(agent);
@@ -43,8 +56,10 @@ public class Main {
         if (bank.evaluateMortgage()) {
             buyer.finalizeDeal();
             deal.confirm();
+            dealService.saveDeal(deal);
         } else {
             deal.cancel();
+            dealService.saveDeal(deal);
         }
     }
 }

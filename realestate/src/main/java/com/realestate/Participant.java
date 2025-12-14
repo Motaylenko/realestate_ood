@@ -15,7 +15,15 @@ public abstract class Participant {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getContactInfo() {
         return contactInfo;
+    }
+
+    public void setContactInfo(String contactInfo) {
+        this.contactInfo = contactInfo;
     }
 }

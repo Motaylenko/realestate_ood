@@ -1,7 +1,6 @@
 package com.realestate;
 
-import com.google.inject.assistedinject.Assisted;
-import com.google.inject.assistedinject.AssistedInject;
+import com.google.inject.Inject;
 
 /**
  * Клас продавця нерухомості
@@ -9,22 +8,18 @@ import com.google.inject.assistedinject.AssistedInject;
 public class Seller extends Participant implements Reviewable {
     private int id;
     private String property;
-    private SellerService sellerService;
+    private DealService dealService;
 
-    @AssistedInject
-    public Seller(SellerService sellerService, @Assisted("id") int id, @Assisted("name") String name, @Assisted("contactInfo") String contactInfo, @Assisted("property") String property) {
-        super(name, contactInfo);
-        this.id = id;
-        this.property = property;
-        this.sellerService = sellerService;
+    @Inject
+    public Seller(DealService dealService) {
+        super("", "");
+        this.dealService = dealService;
     }
 
     public void counterOffer() {
         System.out.println("Продавець " + name + " зробив зустрічну пропозицію щодо " + property);
         // Збереження продавця в базу даних
-        if (sellerService != null) {
-            sellerService.saveSeller(this);
-        }
+        dealService.saveSeller(this);
     }
 
     @Override
@@ -42,5 +37,9 @@ public class Seller extends Participant implements Reviewable {
 
     public String getProperty() {
         return property;
+    }
+
+    public void setProperty(String property) {
+        this.property = property;
     }
 }

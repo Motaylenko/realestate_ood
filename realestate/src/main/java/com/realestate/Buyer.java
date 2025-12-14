@@ -1,8 +1,6 @@
 package com.realestate;
 
 import com.google.inject.Inject;
-import com.google.inject.assistedinject.Assisted;
-import com.google.inject.assistedinject.AssistedInject;
 
 /**
  * Клас покупця нерухомості
@@ -10,22 +8,18 @@ import com.google.inject.assistedinject.AssistedInject;
 public class Buyer extends Participant {
     private int id;
     private float deposit;
-    private BuyerService buyerService;
+    private DealService dealService;
 
-    @AssistedInject
-    public Buyer(BuyerService buyerService, @Assisted("id") int id, @Assisted("name") String name, @Assisted("contactInfo") String contactInfo, @Assisted("deposit") float deposit) {
-        super(name, contactInfo);
-        this.id = id;
-        this.deposit = deposit;
-        this.buyerService = buyerService;
+    @Inject
+    public Buyer(DealService dealService) {
+        super("", "");
+        this.dealService = dealService;
     }
 
     public void sendProposal() {
         System.out.println("Покупець " + name + " надіслав пропозицію");
         // Збереження покупця в базу даних
-        if (buyerService != null) {
-            buyerService.saveBuyer(this);
-        }
+        dealService.saveBuyer(this);
     }
 
     public final void finalizeDeal() {
@@ -42,5 +36,9 @@ public class Buyer extends Participant {
 
     public float getDeposit() {
         return deposit;
+    }
+
+    public void setDeposit(float deposit) {
+        this.deposit = deposit;
     }
 }

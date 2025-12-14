@@ -20,33 +20,68 @@ classDiagram
         +name: string
         +contactInfo: string
         +getInfo(): string
+        +getName(): string
+        +getContactInfo(): string
+        +setName(name): void
+        +setContactInfo(contactInfo): void
     }
 
     %% --- Конкретні учасники ---
     class Buyer {
+        -id: int
         -deposit: float
-        +Buyer(name, deposit)
+        +Buyer(DealService)
         +sendProposal(): void
         +finalizeDeal(): void
+        +getId(): int
+        +setId(id): void
+        +getDeposit(): float
+        +setDeposit(deposit): void
     }
 
     class Agent {
+        -id: int
         -agency: string
-        +Agent(name, agency)
+        +Agent(DealService)
         +organizeTour(): void
         +showProperty(): void
+        +getId(): int
+        +setId(id): void
+        +getAgency(): string
+        +setAgency(agency): void
     }
 
     class Seller {
+        -id: int
         -property: string
-        +Seller(name, property)
+        +Seller(DealService)
         +counterOffer(): void
+        +getId(): int
+        +setId(id): void
+        +getProperty(): string
+        +setProperty(property): void
     }
 
     class Bank {
         -name: string
         +Bank(name)
         +evaluateMortgage(): bool
+    }
+
+    %% --- Сервіс ---
+    class DealService {
+        <<singleton>>
+        +saveDeal(Deal): void
+        +saveBuyer(Buyer): void
+        +saveAgent(Agent): void
+        +saveSeller(Seller): void
+        +findDealById(int): Deal
+        +updateDealStatus(int, String): void
+    }
+
+    %% --- Модуль DI ---
+    class RealestateModule {
+        +configure(): void
     }
 
     %% --- Ієрархія ---
@@ -67,3 +102,12 @@ classDiagram
     Deal o-- Bank : "агрегація"
     Deal *-- Buyer : "композиція"
     Deal o-- Agent : "агрегація"
+
+    %% --- Впровадження залежностей ---
+    Buyer --> DealService : "впровадження через конструктор"
+    Agent --> DealService : "впровадження через конструктор"
+    Seller --> DealService : "впровадження через конструктор"
+    DealService --> Connection : "впровадження"
+
+    RealestateModule --> DealService : "конфігурація"
+    RealestateModule --> Connection : "конфігурація"

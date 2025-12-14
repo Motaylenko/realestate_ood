@@ -21,20 +21,6 @@ public class RealestateModule extends AbstractModule {
     protected void configure() {
         // Прив'язуємо JDBC URL для SQLite
         bindConstant().annotatedWith(Names.named("JDBC_URL")).to("jdbc:sqlite:realestate.db");
-
-        // Встановлюємо фабрики для assisted injection
-        install(new FactoryModuleBuilder()
-            .implement(Buyer.class, Buyer.class)
-            .build(BuyerFactory.class));
-        install(new FactoryModuleBuilder()
-            .implement(Seller.class, Seller.class)
-            .build(SellerFactory.class));
-        install(new FactoryModuleBuilder()
-            .implement(Agent.class, Agent.class)
-            .build(AgentFactory.class));
-        install(new FactoryModuleBuilder()
-            .implement(Deal.class, Deal.class)
-            .build(DealFactory.class));
     }
 
     @Provides
@@ -51,45 +37,33 @@ public class RealestateModule extends AbstractModule {
             String createDealTable = "CREATE TABLE IF NOT EXISTS deals (" +
                 "id INTEGER PRIMARY KEY, " +
                 "date TEXT NOT NULL, " +
-                "status TEXT NOT NULL, " +
-                "seller_id INTEGER, " +
-                "buyer_id INTEGER, " +
-                "agent_id INTEGER, " +
-                "bank_id INTEGER" +
+                "status TEXT NOT NULL" +
                 ");";
             stmt.execute(createDealTable);
 
-            // Можна додати інші таблиці для Seller, Buyer, Agent, Bank якщо потрібно
-            String createSellerTable = "CREATE TABLE IF NOT EXISTS sellers (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "name TEXT NOT NULL, " +
-                "email TEXT NOT NULL, " +
-                "property TEXT NOT NULL" +
-                ");";
-            stmt.execute(createSellerTable);
-
             String createBuyerTable = "CREATE TABLE IF NOT EXISTS buyers (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "id INTEGER PRIMARY KEY, " +
                 "name TEXT NOT NULL, " +
-                "email TEXT NOT NULL, " +
-                "budget REAL NOT NULL" +
+                "contactInfo TEXT NOT NULL, " +
+                "deposit REAL NOT NULL" +
                 ");";
             stmt.execute(createBuyerTable);
 
             String createAgentTable = "CREATE TABLE IF NOT EXISTS agents (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "id INTEGER PRIMARY KEY, " +
                 "name TEXT NOT NULL, " +
-                "email TEXT NOT NULL, " +
-                "company TEXT NOT NULL" +
+                "contactInfo TEXT NOT NULL, " +
+                "agency TEXT NOT NULL" +
                 ");";
             stmt.execute(createAgentTable);
 
-            String createBankTable = "CREATE TABLE IF NOT EXISTS banks (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            String createSellerTable = "CREATE TABLE IF NOT EXISTS sellers (" +
+                "id INTEGER PRIMARY KEY, " +
                 "name TEXT NOT NULL, " +
-                "email TEXT NOT NULL" +
+                "contactInfo TEXT NOT NULL, " +
+                "property TEXT NOT NULL" +
                 ");";
-            stmt.execute(createBankTable);
+            stmt.execute(createSellerTable);
         }
     }
 }

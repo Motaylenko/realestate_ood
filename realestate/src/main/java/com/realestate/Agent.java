@@ -1,8 +1,6 @@
 package com.realestate;
 
 import com.google.inject.Inject;
-import com.google.inject.assistedinject.Assisted;
-import com.google.inject.assistedinject.AssistedInject;
 
 /**
  * Клас агента з нерухомості
@@ -10,22 +8,18 @@ import com.google.inject.assistedinject.AssistedInject;
 public class Agent extends Participant implements Reviewable {
     private int id;
     private String agency;
-    private AgentService agentService;
+    private DealService dealService;
 
-    @AssistedInject
-    public Agent(AgentService agentService, @Assisted("id") int id, @Assisted("name") String name, @Assisted("contactInfo") String contactInfo, @Assisted("agency") String agency) {
-        super(name, contactInfo);
-        this.id = id;
-        this.agency = agency;
-        this.agentService = agentService;
+    @Inject
+    public Agent(DealService dealService) {
+        super("", "");
+        this.dealService = dealService;
     }
 
     public void organizeTour() {
         System.out.println("Агент " + name + " з " + agency + " організовує 3D-тур");
         // Збереження агента в базу даних
-        if (agentService != null) {
-            agentService.saveAgent(this);
-        }
+        dealService.saveAgent(this);
     }
 
     public void showProperty() {
@@ -47,5 +41,9 @@ public class Agent extends Participant implements Reviewable {
 
     public String getAgency() {
         return agency;
+    }
+
+    public void setAgency(String agency) {
+        this.agency = agency;
     }
 }
