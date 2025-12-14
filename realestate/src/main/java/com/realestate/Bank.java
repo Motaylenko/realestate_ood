@@ -1,3 +1,4 @@
+package com.realestate;
 /**
  * Клас банку
  */

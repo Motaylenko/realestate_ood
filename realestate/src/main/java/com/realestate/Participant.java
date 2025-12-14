@@ -1,3 +1,4 @@
+package com.realestate;
 /**
  * Абстрактний клас учасника угоди
  */
@@ -10,7 +11,11 @@ public abstract class Participant {
         this.contactInfo = contactInfo;
     }
     
-    public String getInfo() {
-        return "Ім'я: " + name + ", Контакти: " + contactInfo;
+    public String getName() {
+        return name;
+    }
+
+    public String getContactInfo() {
+        return contactInfo;
     }
 }

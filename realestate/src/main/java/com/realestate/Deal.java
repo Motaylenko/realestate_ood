@@ -1,3 +1,9 @@
+package com.realestate;
+
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
+import com.google.inject.assistedinject.AssistedInject;
+
 /**
  * Клас угоди з нерухомістю
  */
@@ -9,11 +15,13 @@ public class Deal {
     private Buyer buyer;
     private Agent agent;
     private Bank bank;
-    
-    public Deal(int id, String date) {
+
+    @AssistedInject
+    public Deal(DealService dealService, @Assisted int id, @Assisted String date) {
         this.id = id;
         this.date = date;
         this.status = "Нова";
+        this.dealService = dealService;
     }
     
     public void confirm() {
@@ -40,5 +48,33 @@ public class Deal {
     
     public void setBank(Bank bank) {
         this.bank = bank;
+    }
+    
+    public int getId() {
+        return id;
+    }
+    
+    public String getDate() {
+        return date;
+    }
+    
+    public String getStatus() {
+        return status;
+    }
+    
+    public Seller getSeller() {
+        return seller;
+    }
+    
+    public Buyer getBuyer() {
+        return buyer;
+    }
+    
+    public Agent getAgent() {
+        return agent;
+    }
+    
+    public Bank getBank() {
+        return bank;
     }
 }
