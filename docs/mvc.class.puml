@@ -1,0 +1,103 @@
+@startuml
+
+class Deal {
+    <<Model>>
+    -int id
+    -String date
+    -String status
+    -Seller seller
+    -Buyer buyer
+    -Agent agent
+    -Bank bank
+    +Deal()
+    +getId() : int
+    +getDate() : String
+    +getStatus() : String
+    +confirm() : void
+    +cancel() : void
+    +setSeller(seller : Seller) : void
+    +setBuyer(buyer : Buyer) : void
+}
+
+class DealService {
+    <<Service>>
+    -Connection connection
+    +DealService(connection : Connection)
+    +saveDeal(deal : Deal) : void
+    +findDealById(id : int) : Deal
+    +findAllDeals() : List<Deal>
+    +saveBuyer(buyer : Buyer) : void
+    +saveAgent(agent : Agent) : void
+    +saveSeller(seller : Seller) : void
+}
+
+class RealestateController {
+    <<Controller>>
+    -DealService dealService
+    +RealestateController(dealService : DealService)
+    +getAllDeals() : List<Deal>
+    +getDealById(id : int) : Deal
+}
+
+class RealestateWebView {
+    <<View>>
+    -RealestateController controller
+    -WebServer server
+    -RealestateView htmlRenderer
+    +RealestateWebView(controller : RealestateController, server : WebServer, htmlRenderer : RealestateView)
+    +start(port : int) : void
+    -setupRoutes() : void
+}
+
+class RealestateView {
+    <<ViewComponent>>
+    -RealestateController controller
+    +RealestateView(controller : RealestateController)
+    +renderDealsPage() : String
+    +renderDealPage(id : int) : String
+}
+
+abstract class WebServer {
+    <<Infrastructure>>
+    +start(port : int) : void
+    +stop() : void
+    +before(handler : RequestHandler) : void
+    +options(path : String, handler : RequestHandler) : void
+    +get(path : String, handler : RequestHandler) : void
+}
+
+class JavalinWebServer {
+    -Javalin app
+    +JavalinWebServer()
+    +start(port : int) : void
+    +stop() : void
+    +before(handler : RequestHandler) : void
+    +options(path : String, handler : RequestHandler) : void
+    +get(path : String, handler : RequestHandler) : void
+}
+
+interface HttpContext {
+    <<Interface>>
+    +html(content : String)
+    +json(obj : Object)
+    +redirect(path : String)
+    +pathParam(key : String) : String
+    +status(code : int) : Response
+    +result(content : String) : Response
+}
+
+interface Response {
+    <<Interface>>
+}
+
+RealestateWebView --> RealestateController : View->Controller
+RealestateWebView --> WebServer : uses
+RealestateWebView --> RealestateView : uses
+RealestateView --> RealestateController : uses
+RealestateController --> DealService : uses
+DealService --> Deal : manages
+WebServer <|.. JavalinWebServer : implements
+RealestateWebView ..> HttpContext : uses
+HttpContext --|> Response : extends
+
+@enduml

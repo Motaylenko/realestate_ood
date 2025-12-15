@@ -47,7 +47,7 @@ public class RealestateWebView {
         });
 
         // HTML сторінка окремої угоди
-        server.get("/deals/:id", context -> {
+        server.get("/deals/{id}", context -> {
             String idStr = context.pathParam("id");
             try {
                 int id = Integer.parseInt(idStr);

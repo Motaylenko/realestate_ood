@@ -2,7 +2,7 @@ package com.realestate;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.realestate.webserver.WebServer;
+
 import com.realestate.webserver.RealestateWebView;
 
 /**

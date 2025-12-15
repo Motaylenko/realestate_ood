@@ -14,99 +14,177 @@ public class RealestateView {
         this.controller = controller;
     }
 
+    private String getHead(String title) {
+        return "<html><head><title>" + title + "</title>" +
+                "<meta charset='UTF-8'>" +
+                "<link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap' rel='stylesheet'>"
+                +
+                "<style>" +
+                ":root { --primary: #4F46E5; --bg: #F9FAFB; --card: #FFFFFF; --text: #1F2937; --text-light: #6B7280; --border: #E5E7EB; }"
+                +
+                "body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 40px; line-height: 1.5; }"
+                +
+                "h1, h2, h3 { color: var(--text); margin-top: 0; }" +
+                "a { color: var(--primary); text-decoration: none; }" +
+                "a:hover { text-decoration: underline; }" +
+                ".container { max-width: 1000px; margin: 0 auto; }" +
+                ".card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 24px; transition: transform 0.2s; }"
+                +
+                ".card:hover { transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }" +
+                ".grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }" +
+                ".badge { display: inline-block; padding: 4px 12px; border-radius: 9999px; font-size: 0.875rem; font-weight: 500; }"
+                +
+                ".badge-success { background: #D1FAE5; color: #065F46; }" +
+                ".badge-warning { background: #FEF3C7; color: #92400E; }" +
+                ".badge-gray { background: #E5E7EB; color: #374151; }" +
+                ".btn { display: inline-block; background: var(--primary); color: white; padding: 10px 20px; border-radius: 6px; font-weight: 500; text-decoration: none; transition: background 0.2s; }"
+                +
+                ".btn:hover { background: #4338CA; text-decoration: none; }" +
+                "table { width: 100%; border-collapse: collapse; margin-top: 16px; }" +
+                "th, td { text-align: left; padding: 12px; border-bottom: 1px solid var(--border); }" +
+                "th { font-weight: 600; color: var(--text-light); }" +
+                ".label { font-size: 0.875rem; color: var(--text-light); display: block; margin-bottom: 4px; }" +
+                ".value { font-size: 1rem; font-weight: 500; word-break: break-all; }" +
+                ".header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }" +
+                ".details-list p { margin: 8px 0; }" +
+                "</style></head><body><div class='container'>";
+    }
+
+    private String getFooter() {
+        return "</div></body></html>";
+    }
+
     public String renderDealsPage() {
         List<Deal> deals = controller.getAllDeals();
-        return renderDeals(deals);
+        StringBuilder sb = new StringBuilder();
+        sb.append(getHead("Угоди нерухомості"));
+
+        sb.append("<div class='header'>");
+        sb.append("<h1>🏠 Угоди нерухомості</h1>");
+        sb.append("</div>");
+
+        if (deals.isEmpty()) {
+            sb.append("<div class='card'><p>Угод не знайдено.</p></div>");
+        } else {
+            sb.append("<div class='card'>");
+            sb.append("<table>");
+            sb.append(
+                    "<thead><tr><th>ID</th><th>Дата</th><th>Статус</th><th>Покупець</th><th>Продавець</th><th>Дії</th></tr></thead>");
+            sb.append("<tbody>");
+            for (Deal deal : deals) {
+                String status = deal.getStatus() != null ? deal.getStatus() : "Невідомо";
+                String statusClass = status.toLowerCase().contains("підтверджена") ? "badge-success"
+                        : (status.toLowerCase().contains("скасована") ? "badge-warning" : "badge-gray");
+
+                sb.append("<tr>");
+                sb.append("<td>#").append(deal.getId()).append("</td>");
+                sb.append("<td>").append(deal.getDate()).append("</td>");
+                sb.append("<td><span class='badge ").append(statusClass).append("'>").append(status)
+                        .append("</span></td>");
+                sb.append("<td>").append(deal.getBuyer() != null ? deal.getBuyer().getName() : "-").append("</td>");
+                sb.append("<td>").append(deal.getSeller() != null ? deal.getSeller().getName() : "-").append("</td>");
+                sb.append("<td><a href='/deals/").append(deal.getId())
+                        .append("' class='btn' style='padding: 6px 12px; font-size: 0.875rem;'>Детальніше</a></td>");
+                sb.append("</tr>");
+            }
+            sb.append("</tbody></table>");
+            sb.append("</div>");
+        }
+
+        sb.append(getFooter());
+        return sb.toString();
     }
 
     public String renderDealPage(int id) {
         Deal deal = controller.getDealById(id);
-        if (deal != null) {
-            return renderDeal(deal);
+        if (deal == null) {
+            return getHead("Угоду не знайдено") + "<h1>Угоду не знайдено</h1><a href='/deals'>Назад до списку</a>"
+                    + getFooter();
         }
-        return "<html><body><h1>Deal not found</h1><a href='/deals'>Back</a></body></html>";
-    }
 
-    private String renderDeals(List<Deal> deals) {
         StringBuilder sb = new StringBuilder();
-        sb.append("<html><head><title>Real Estate Deals</title>");
-        sb.append("<style>");
-        sb.append("body { font-family: Arial, sans-serif; margin: 20px; }");
-        sb.append("table { border-collapse: collapse; width: 100%; }");
-        sb.append("th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }");
-        sb.append("th { background-color: #f2f2f2; }");
-        sb.append("tr:hover { background-color: #f5f5f5; }");
-        sb.append(
-                ".btn { display: inline-block; padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 5px; }");
-        sb.append("</style>");
-        sb.append("</head><body>");
-        sb.append("<h1>Deals</h1>");
-        sb.append(
-                "<table><tr><th>ID</th><th>Date</th><th>Status</th><th>Buyer</th><th>Seller</th><th>Agent</th><th>Actions</th></tr>");
-        for (Deal deal : deals) {
-            sb.append("<tr>");
-            sb.append("<td>").append(deal.getId()).append("</td>");
-            sb.append("<td>").append(deal.getDate()).append("</td>");
-            sb.append("<td>").append(deal.getStatus()).append("</td>");
-            sb.append("<td>").append(deal.getBuyer() != null ? deal.getBuyer().getName() : "N/A").append("</td>");
-            sb.append("<td>").append(deal.getSeller() != null ? deal.getSeller().getName() : "N/A").append("</td>");
-            sb.append("<td>").append(deal.getAgent() != null ? deal.getAgent().getName() : "N/A").append("</td>");
-            sb.append("<td><a href='/deals/").append(deal.getId()).append("'>View Details</a></td>");
-            sb.append("</tr>");
-        }
-        sb.append("</table>");
-        sb.append("</body></html>");
-        return sb.toString();
-    }
+        sb.append(getHead("Угода #" + deal.getId()));
 
-    public String renderDeal(Deal deal) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("<html><head><title>Deal #").append(deal.getId()).append("</title>");
-        sb.append("<style>");
         sb.append(
-                "body { font-family: Arial, sans-serif; margin: 20px; max-width: 800px; margin: 0 auto; padding: 20px; }");
-        sb.append(".card { border: 1px solid #ddd; padding: 20px; border-radius: 8px; margin-bottom: 20px; }");
-        sb.append("h2 { border-bottom: 2px solid #eee; padding-bottom: 10px; }");
-        sb.append(".back-link { display: inline-block; margin-top: 20px; color: #007bff; text-decoration: none; }");
-        sb.append("</style>");
-        sb.append("</head><body>");
+                "<div style='margin-bottom: 24px;'><a href='/deals' style='color: var(--text-light);'>&larr; Назад до списку</a></div>");
 
-        sb.append("<h1>Deal Details #").append(deal.getId()).append("</h1>");
+        sb.append("<div class='header'>");
+        sb.append("<h1>Деталі угоди #").append(deal.getId()).append("</h1>");
 
-        sb.append("<div class='card'>");
-        sb.append("<p><b>Date:</b> ").append(deal.getDate()).append("</p>");
-        sb.append("<p><b>Status:</b> ").append(deal.getStatus()).append("</p>");
+        String status = deal.getStatus() != null ? deal.getStatus() : "Невідомо";
+        String statusClass = status.toLowerCase().contains("підтверджена") ? "badge-success"
+                : (status.toLowerCase().contains("скасована") ? "badge-warning" : "badge-gray");
+
+        sb.append("<span class='badge ").append(statusClass).append("'>").append(status).append("</span>");
         sb.append("</div>");
 
+        sb.append("<div class='card' style='margin-bottom: 32px;'>");
+        sb.append("<span class='label'>Дата угоди</span><span class='value'>").append(deal.getDate()).append("</span>");
+        sb.append("</div>");
+
+        sb.append("<div class='grid'>");
+
+        // Buyer
+        sb.append("<div class='card details-list'>");
+        sb.append("<h3>👤 Покупець</h3>");
         if (deal.getBuyer() != null) {
-            sb.append("<div class='card'>");
-            sb.append("<h2>Buyer</h2>");
-            sb.append("<p><b>Name:</b> ").append(deal.getBuyer().getName()).append("</p>");
-            sb.append("<p><b>Contact:</b> ").append(deal.getBuyer().getContactInfo()).append("</p>");
-            sb.append("<p><b>Deposit:</b> ").append(deal.getBuyer().getDeposit()).append("</p>");
-            sb.append("</div>");
+            sb.append("<p><span class='label'>Ім'я</span><span class='value'>").append(deal.getBuyer().getName())
+                    .append("</span></p>");
+            sb.append("<p><span class='label'>Контакти</span><span class='value'>")
+                    .append(deal.getBuyer().getContactInfo()).append("</span></p>");
+            sb.append("<p><span class='label'>Завдаток</span><span class='value'>$")
+                    .append(String.format("%,.2f", deal.getBuyer().getDeposit())).append("</span></p>");
+        } else {
+            sb.append("<p class='text-light'>Не призначено</p>");
         }
+        sb.append("</div>");
 
+        // Seller
+        sb.append("<div class='card details-list'>");
+        sb.append("<h3>🏘️ Продавець</h3>");
         if (deal.getSeller() != null) {
-            sb.append("<div class='card'>");
-            sb.append("<h2>Seller</h2>");
-            sb.append("<p><b>Name:</b> ").append(deal.getSeller().getName()).append("</p>");
-            sb.append("<p><b>Contact:</b> ").append(deal.getSeller().getContactInfo()).append("</p>");
-            sb.append("<p><b>Property:</b> ").append(deal.getSeller().getProperty()).append("</p>");
-            sb.append("</div>");
+            sb.append("<p><span class='label'>Ім'я</span><span class='value'>").append(deal.getSeller().getName())
+                    .append("</span></p>");
+            sb.append("<p><span class='label'>Контакти</span><span class='value'>")
+                    .append(deal.getSeller().getContactInfo()).append("</span></p>");
+            sb.append("<p><span class='label'>Нерухомість</span><span class='value'>")
+                    .append(deal.getSeller().getProperty()).append("</span></p>");
+        } else {
+            sb.append("<p class='text-light'>Не призначено</p>");
         }
+        sb.append("</div>");
 
+        // Agent
+        sb.append("<div class='card details-list'>");
+        sb.append("<h3>🕴️ Агент</h3>");
         if (deal.getAgent() != null) {
-            sb.append("<div class='card'>");
-            sb.append("<h2>Agent</h2>");
-            sb.append("<p><b>Name:</b> ").append(deal.getAgent().getName()).append("</p>");
-            sb.append("<p><b>Contact:</b> ").append(deal.getAgent().getContactInfo()).append("</p>");
-            sb.append("<p><b>Agency:</b> ").append(deal.getAgent().getAgency()).append("</p>");
-            sb.append("</div>");
+            sb.append("<p><span class='label'>Ім'я</span><span class='value'>").append(deal.getAgent().getName())
+                    .append("</span></p>");
+            sb.append("<p><span class='label'>Контакти</span><span class='value'>")
+                    .append(deal.getAgent().getContactInfo()).append("</span></p>");
+            sb.append("<p><span class='label'>Агентство</span><span class='value'>").append(deal.getAgent().getAgency())
+                    .append("</span></p>");
+        } else {
+            sb.append("<p class='text-light'>Не призначено</p>");
         }
+        sb.append("</div>");
 
-        sb.append("<a href='/deals' class='back-link'>&larr; Back to Listings</a>");
-        sb.append("</body></html>");
+        // Bank
+        sb.append("<div class='card details-list'>");
+        sb.append("<h3>🏦 Банк</h3>");
+        if (deal.getBank() != null) {
+            sb.append("<p><span class='label'>Назва</span><span class='value'>").append(deal.getBank().getName())
+                    .append("</span></p>");
+            sb.append("<p><span class='label'>Контакти</span><span class='value'>")
+                    .append(deal.getBank().getContactInfo()).append("</span></p>");
+        } else {
+            sb.append("<p style='color: var(--text-light); font-style: italic;'>Інформація про банк відсутня</p>");
+        }
+        sb.append("</div>");
+
+        sb.append("</div>"); // End grid
+
+        sb.append(getFooter());
         return sb.toString();
     }
 }
