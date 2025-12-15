@@ -2,6 +2,8 @@ package com.realestate;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.realestate.webserver.WebServer;
+import com.realestate.webserver.RealestateWebView;
 
 /**
  * Головний клас для демонстрації роботи програми
@@ -36,7 +38,7 @@ public class Main {
         agent.setAgency("Київська Нерухомість");
 
         Bank bank = new Bank("ПриватБанк", "office@privatbank.ua");
-        
+
         // Створення угоди
         Deal deal = new Deal();
         deal.setId(1);
@@ -45,17 +47,18 @@ public class Main {
         deal.setSeller(seller);
         deal.setAgent(agent);
         deal.setBank(bank);
-        
+
         // Демонстрація процесу
-        System.out.println("\n=== Демонстрація роботи програми ===\n");
-        
+
+        System.out.println("\n=== Демонстрація роботи програми ===");
+
         agent.organizeTour();
         agent.showProperty();
-        
+
         buyer.sendProposal();
         seller.reviewOffer();
         seller.counterOffer();
-        
+
         if (bank.evaluateMortgage()) {
             buyer.finalizeDeal();
             deal.confirm();
@@ -64,5 +67,16 @@ public class Main {
             deal.cancel();
             dealService.saveDeal(deal);
         }
+
+        System.out.println("\n=== Запуск веб-сервера ===");
+
+        // Запускаємо веб-сервер для перегляду
+        runWebMode(injector);
     }
+
+    private static void runWebMode(Injector injector) {
+        RealestateWebView webView = injector.getInstance(RealestateWebView.class);
+        webView.start(8080);
+    }
+
 }

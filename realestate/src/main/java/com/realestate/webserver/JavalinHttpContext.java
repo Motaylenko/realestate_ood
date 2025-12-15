@@ -35,4 +35,31 @@ public class JavalinHttpContext implements HttpContext {
         ctx.result(content);
         return this;
     }
+
+    @Override
+    public Response html(String content) {
+        ctx.html(content);
+        return this;
+    }
+
+    @Override
+    public Response redirect(String location) {
+        ctx.redirect(location);
+        return this;
+    }
+
+    @Override
+    public String formParam(String key) {
+        return ctx.formParam(key);
+    }
+
+    @Override
+    public String queryParam(String key) {
+        return ctx.queryParam(key);
+    }
+
+    @Override
+    public String pathParam(String key) {
+        return ctx.pathParam(key);
+    }
 }

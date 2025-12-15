@@ -16,8 +16,8 @@ public class Agent extends Participant implements Reviewable {
 
     // @Inject
     // public Agent(DealService dealService) {
-    //     super("", "");
-    //     this.dealService = dealService;
+    // super("", "");
+    // this.dealService = dealService;
     // }
 
     @Inject
@@ -54,5 +54,14 @@ public class Agent extends Participant implements Reviewable {
 
     public void setAgency(String agency) {
         this.agency = agency;
+    }
+
+    public static Agent fromResultSet(java.sql.ResultSet rs) throws java.sql.SQLException {
+        Agent agent = new Agent();
+        agent.setId(rs.getInt("id"));
+        agent.setName(rs.getString("name"));
+        agent.setContactInfo(rs.getString("contactInfo"));
+        agent.setAgency(rs.getString("agency"));
+        return agent;
     }
 }

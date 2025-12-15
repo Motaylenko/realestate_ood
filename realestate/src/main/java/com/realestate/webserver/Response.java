@@ -5,7 +5,14 @@ package com.realestate.webserver;
  */
 public interface Response {
     Response status(int code);
+
     Response header(String name, String value);
+
     Response json(Object obj);
+
     Response result(String content);
+
+    Response html(String content);
+
+    Response redirect(String location);
 }

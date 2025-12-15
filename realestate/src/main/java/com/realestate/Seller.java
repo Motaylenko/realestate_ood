@@ -16,8 +16,8 @@ public class Seller extends Participant implements Reviewable {
 
     // @Inject
     // public Seller(DealService dealService) {
-    //     super("", "");
-    //     this.dealService = dealService;
+    // super("", "");
+    // this.dealService = dealService;
     // }
 
     @Inject
@@ -50,5 +50,14 @@ public class Seller extends Participant implements Reviewable {
 
     public void setProperty(String property) {
         this.property = property;
+    }
+
+    public static Seller fromResultSet(java.sql.ResultSet rs) throws java.sql.SQLException {
+        Seller seller = new Seller();
+        seller.setId(rs.getInt("id"));
+        seller.setName(rs.getString("name"));
+        seller.setContactInfo(rs.getString("contactInfo"));
+        seller.setProperty(rs.getString("property"));
+        return seller;
     }
 }
