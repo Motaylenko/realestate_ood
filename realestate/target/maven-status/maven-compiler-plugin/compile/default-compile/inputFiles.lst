@@ -1,11 +1,20 @@
-/workspaces/realestate_ood/realestate/src/main/java/com/realestate/Agent.java
-/workspaces/realestate_ood/realestate/src/main/java/com/realestate/App.java
-/workspaces/realestate_ood/realestate/src/main/java/com/realestate/Bank.java
-/workspaces/realestate_ood/realestate/src/main/java/com/realestate/Buyer.java
-/workspaces/realestate_ood/realestate/src/main/java/com/realestate/Deal.java
-/workspaces/realestate_ood/realestate/src/main/java/com/realestate/DealService.java
-/workspaces/realestate_ood/realestate/src/main/java/com/realestate/Main.java
-/workspaces/realestate_ood/realestate/src/main/java/com/realestate/Participant.java
-/workspaces/realestate_ood/realestate/src/main/java/com/realestate/RealestateModule.java
-/workspaces/realestate_ood/realestate/src/main/java/com/realestate/Reviewable.java
-/workspaces/realestate_ood/realestate/src/main/java/com/realestate/Seller.java
+C:\Users\Олександр Мотайленко\realestate_ood\realestate\src\main\java\com\realestate\Agent.java
+C:\Users\Олександр Мотайленко\realestate_ood\realestate\src\main\java\com\realestate\App.java
+C:\Users\Олександр Мотайленко\realestate_ood\realestate\src\main\java\com\realestate\Bank.java
+C:\Users\Олександр Мотайленко\realestate_ood\realestate\src\main\java\com\realestate\Buyer.java
+C:\Users\Олександр Мотайленко\realestate_ood\realestate\src\main\java\com\realestate\Deal.java
+C:\Users\Олександр Мотайленко\realestate_ood\realestate\src\main\java\com\realestate\DealService.java
+C:\Users\Олександр Мотайленко\realestate_ood\realestate\src\main\java\com\realestate\Main.java
+C:\Users\Олександр Мотайленко\realestate_ood\realestate\src\main\java\com\realestate\Participant.java
+C:\Users\Олександр Мотайленко\realestate_ood\realestate\src\main\java\com\realestate\RealestateController.java
+C:\Users\Олександр Мотайленко\realestate_ood\realestate\src\main\java\com\realestate\RealestateModule.java
+C:\Users\Олександр Мотайленко\realestate_ood\realestate\src\main\java\com\realestate\Reviewable.java
+C:\Users\Олександр Мотайленко\realestate_ood\realestate\src\main\java\com\realestate\Seller.java
+C:\Users\Олександр Мотайленко\realestate_ood\realestate\src\main\java\com\realestate\webserver\HttpContext.java
+C:\Users\Олександр Мотайленко\realestate_ood\realestate\src\main\java\com\realestate\webserver\JavalinHttpContext.java
+C:\Users\Олександр Мотайленко\realestate_ood\realestate\src\main\java\com\realestate\webserver\JavalinWebServer.java
+C:\Users\Олександр Мотайленко\realestate_ood\realestate\src\main\java\com\realestate\webserver\RealestateView.java
+C:\Users\Олександр Мотайленко\realestate_ood\realestate\src\main\java\com\realestate\webserver\RealestateWebView.java
+C:\Users\Олександр Мотайленко\realestate_ood\realestate\src\main\java\com\realestate\webserver\Request.java
+C:\Users\Олександр Мотайленко\realestate_ood\realestate\src\main\java\com\realestate\webserver\Response.java
+C:\Users\Олександр Мотайленко\realestate_ood\realestate\src\main\java\com\realestate\webserver\WebServer.java

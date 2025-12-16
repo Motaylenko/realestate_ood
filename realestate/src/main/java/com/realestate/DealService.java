@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Singleton
 public class DealService {
@@ -17,12 +19,24 @@ public class DealService {
     }
 
     public void saveDeal(Deal deal) {
-        String sql = "INSERT OR REPLACE INTO deals (id, date, status) VALUES (?, ?, ?)";
+        String sql = "INSERT OR REPLACE INTO deals (id, date, status, buyer_id, seller_id, agent_id) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, deal.getId());
             stmt.setString(2, deal.getDate());
             stmt.setString(3, deal.getStatus());
+            if (deal.getBuyer() != null)
+                stmt.setInt(4, deal.getBuyer().getId());
+            else
+                stmt.setNull(4, java.sql.Types.INTEGER);
+            if (deal.getSeller() != null)
+                stmt.setInt(5, deal.getSeller().getId());
+            else
+                stmt.setNull(5, java.sql.Types.INTEGER);
+            if (deal.getAgent() != null)
+                stmt.setInt(6, deal.getAgent().getId());
+            else
+                stmt.setNull(6, java.sql.Types.INTEGER);
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Failed to save deal", e);
@@ -75,22 +89,104 @@ public class DealService {
      * Знаходить угоду за ID
      */
     public Deal findDealById(int id) {
-        String sql = "SELECT id, date, status FROM deals WHERE id = ?";
+        String sql = "SELECT * FROM deals WHERE id = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    Deal deal = new Deal();
-                    deal.setId(rs.getInt("id"));
-                    deal.setDate(rs.getString("date"));
-                    deal.setStatus(rs.getString("status"));
+                    Deal deal = Deal.fromResultSet(rs);
+
+                    int buyerId = rs.getInt("buyer_id");
+                    if (buyerId > 0)
+                        deal.setBuyer(findBuyerById(buyerId));
+
+                    int sellerId = rs.getInt("seller_id");
+                    if (sellerId > 0)
+                        deal.setSeller(findSellerById(sellerId));
+
+                    int agentId = rs.getInt("agent_id");
+                    if (agentId > 0)
+                        deal.setAgent(findAgentById(agentId));
+
                     return deal;
                 }
             }
         } catch (SQLException e) {
             throw new RuntimeException("Failed to find deal", e);
+        }
+        return null;
+    }
+
+    public List<Deal> findAllDeals() {
+        List<Deal> deals = new ArrayList<>();
+        String sql = "SELECT * FROM deals";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql);
+                ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Deal deal = Deal.fromResultSet(rs);
+
+                int buyerId = rs.getInt("buyer_id");
+                if (buyerId > 0)
+                    deal.setBuyer(findBuyerById(buyerId));
+
+                int sellerId = rs.getInt("seller_id");
+                if (sellerId > 0)
+                    deal.setSeller(findSellerById(sellerId));
+
+                int agentId = rs.getInt("agent_id");
+                if (agentId > 0)
+                    deal.setAgent(findAgentById(agentId));
+
+                deals.add(deal);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to find deals", e);
+        }
+        return deals;
+    }
+
+    public Buyer findBuyerById(int id) {
+        String sql = "SELECT * FROM buyers WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next())
+                    return Buyer.fromResultSet(rs);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to find buyer", e);
+        }
+        return null;
+    }
+
+    public Seller findSellerById(int id) {
+        String sql = "SELECT * FROM sellers WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next())
+                    return Seller.fromResultSet(rs);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to find seller", e);
+        }
+        return null;
+    }
+
+    public Agent findAgentById(int id) {
+        String sql = "SELECT * FROM agents WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next())
+                    return Agent.fromResultSet(rs);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to find agent", e);
         }
         return null;
     }
