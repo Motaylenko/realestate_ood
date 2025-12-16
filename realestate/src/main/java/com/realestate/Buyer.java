@@ -16,8 +16,8 @@ public class Buyer extends Participant {
 
     // @Inject
     // public Buyer(DealService dealService) {
-    //     super("", "");
-    //     this.dealService = dealService;
+    // super("", "");
+    // this.dealService = dealService;
     // }
 
     @Inject
@@ -49,5 +49,14 @@ public class Buyer extends Participant {
 
     public void setDeposit(float deposit) {
         this.deposit = deposit;
+    }
+
+    public static Buyer fromResultSet(java.sql.ResultSet rs) throws java.sql.SQLException {
+        Buyer buyer = new Buyer();
+        buyer.setId(rs.getInt("id"));
+        buyer.setName(rs.getString("name"));
+        buyer.setContactInfo(rs.getString("contactInfo"));
+        buyer.setDeposit(rs.getFloat("deposit"));
+        return buyer;
     }
 }
